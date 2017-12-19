@@ -56,7 +56,7 @@ function Vec2(x=0, y=0)
     }
 }
 
-function Circle(p = new Vec2(), r=1, m=1, v = new Vec2())
+function Circle(p = new Vec2(), r=1, m=1, v = new Vec2(), fillColor = "black")
 {
     this.p = p;
     this.r = r;
@@ -68,6 +68,8 @@ function Circle(p = new Vec2(), r=1, m=1, v = new Vec2())
     this.a = new Vec2();
     
     this.netf = new Vec2();
+
+    this.fillStyle = fillColor;
 
     this.addForce = function(f) { this.netf = this.netf.add(f); }
 
@@ -84,7 +86,7 @@ function Circle(p = new Vec2(), r=1, m=1, v = new Vec2())
 
     this.render = function(ctx)
     {
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = this.fillStyle;
         ctx.beginPath();
         ctx.arc(this.p.x, this.p.y, this.r, 0, 2*Math.PI);
         ctx.fill();
@@ -94,21 +96,7 @@ function Circle(p = new Vec2(), r=1, m=1, v = new Vec2())
 var orbit_r = 150;
 var init_m = 0.1;
 
-var gravPoint = new function()
-{
-    this.p = new Vec2(cvs.width/2, cvs.height/2);
-    this.m = 10;
-
-    this.update = function(delta){}
-
-    this.render = function(ctx)
-    {
-        ctx.fillStyle = "#FF0000";
-        ctx.beginPath();
-        ctx.arc(this.p.x, this.p.y, 10, 0, 2*Math.PI);
-        ctx.fill();
-    }
-}
+var gravPoint = new Circle(new Vec2(cvs.width/2, cvs.height/2), 10, 10, new Vec2(), "red");
 
 var STEPS_PER_FRAME = 1;
 
@@ -139,6 +127,8 @@ function update(delta)
 
     circle.addForce(f);
     circle.update(delta);
+    gravPoint.addForce(f.scale(-1));
+    gravPoint.update(delta);
 }
 
 function render(delta)
