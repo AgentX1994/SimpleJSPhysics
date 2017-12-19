@@ -1,3 +1,21 @@
+body {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+#container {
+    background-color: blue;
+    width: 75%;
+    padding: 0px;
+    margin: auto;
+    overflow: hidden;
+}
+
 #myCanvas {
-    border: 1px solid black;
+    display: block;
+    height: 600px;
+    width: 800px;
+    padding: 0px;
+    margin: auto
 }

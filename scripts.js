@@ -72,9 +72,10 @@ var gravPoint = new function()
     }
 }
 
-var timescale = 1;
+var STEPS_PER_FRAME = 1;
 
-var G = 6.646e-2;
+var G = 6.646e-11; // N m^2 / kg^2
+var pixels_to_meters = 1/100000*// 100 px = 1 cm
 var circle;
 // initialize circle without polluting namespace
 (function ()
@@ -93,6 +94,7 @@ function update(delta)
     var rsq = deltax*deltax + deltay*deltay;
     if (rsq == 0) rsq = 0.1;
     var r = Math.sqrt(rsq);
+    r *= pixels_to_meters;
     var f = G*gravPoint.m*circle.m/rsq;
 
     var fx = f*deltax/r;
@@ -104,7 +106,8 @@ function update(delta)
 
 function render(delta)
 {
-    ctx.clearRect(0,0, cvs.width, cvs.height);
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0,0, cvs.width, cvs.height);
     circle.render(ctx);
     gravPoint.render(ctx);
 }
@@ -114,7 +117,8 @@ function gameloop(timestamp)
     if(!lastFrameTime) lastFrameTime = timestamp;
     var delta = (timestamp - lastFrameTime)/1000; // Time between frames in seconds
     lastFrameTime = timestamp;
-    update(timescale * delta);
+    for (var i = 0; i < STEPS_PER_FRAME; i++)
+        update(delta/STEPS_PER_FRAME);
     render(delta);
     window.requestAnimationFrame(gameloop);
 }
