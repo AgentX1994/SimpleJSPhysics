@@ -73,20 +73,11 @@ function Circle(p = new Vec2(), r=1, m=1, v = new Vec2())
 
     this.update = function(delta)
     {
-        // Velocity Verlot integration
-        var preva = this.a;
-
-        // p = p + v*dt + (1/2)*a*dt*dt
-        this.p = this.p.add(this.v.scale(delta).add(this.a.scale(0.5*delta*delta)));
-
-        // a = f/m
-        this.a = this.netf.scale(this.invm);
-
-        // avg_a = (a+prev_a)/2
-        var avga = this.a.add(preva).scale(0.5);
-
-        // v = v + avg_a*dt
-        this.v = this.v.add(avga.scale(delta));
+        // Semi-Implicit Euler Integration
+        // v = v + (F/m)*dt
+        this.v = this.v.add(this.netf.scale(this.invm*delta));
+        // p = p + v*dt
+        this.p = this.p.add(this.v.scale(delta));
 
         this.netf = new Vec2();
     }
