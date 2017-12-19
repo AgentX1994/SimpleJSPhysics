@@ -4,9 +4,22 @@ body {
     padding: 0px;
 }
 
+#myHeader {
+    width: 75%;
+    height: 50px;
+    margin: auto;
+    background-color: red;
+}
+
+#logo {
+    padding: 0px 10px;
+    color: white;
+}
+
 #container {
     background-color: blue;
     width: 75%;
+    height: 650px;
     padding: 0px;
     margin: auto;
     overflow: hidden;
