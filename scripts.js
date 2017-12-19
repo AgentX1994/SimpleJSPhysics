@@ -98,12 +98,12 @@ var init_m = 0.1;
 
 var gravPoint = new Circle(new Vec2(cvs.width/2, cvs.height/2), 10, 10, new Vec2(), "red");
 
-var STEPS_PER_FRAME = 1;
-
 var G = 6.646e-11; // N m^2 / kg^2
 var meters_to_pixels = 100000;
 var pixels_to_meters = 1/meters_to_pixels; // 100 px = 1 cm
 var circle;
+
+var max_step = 1/30;
 // initialize circle without polluting namespace
 (function ()
 {
@@ -144,8 +144,13 @@ function gameloop(timestamp)
     if(!lastFrameTime) lastFrameTime = timestamp;
     var delta = (timestamp - lastFrameTime)/1000; // Time between frames in seconds
     lastFrameTime = timestamp;
-    for (var i = 0; i < STEPS_PER_FRAME; i++)
-        update(delta/STEPS_PER_FRAME);
+    while (delta > 0.0)
+    {
+        var dt = Math.min(delta, max_step);
+        update(dt);
+
+        delta -= dt;
+    }
     render(delta);
     window.requestAnimationFrame(gameloop);
 }
